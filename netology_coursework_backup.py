@@ -10,6 +10,11 @@ yad_token = ""
 yad_save_folder_name = "vk_avatar_save"
 
 
+def json_save(data: dict | list, file_name: str) -> None:
+    with open(file_name, "w") as file_io:
+        json.dump(data, file_name, indent=2)
+
+
 class VkDownloader:
 
     def __init__(self, token, app_id):
@@ -72,6 +77,7 @@ class VkDownloader:
                 photos.append(photos_info)
 
             # Скачиваем фотографии
+            photos_list = []
             for photo_name, photo_url in max_size_photo.items():
                 with open(f'images_vk/{photo_name}.jpg', 'wb') as file_io:
                     photos_list.append([photo_name, photo_url])
@@ -80,10 +86,8 @@ class VkDownloader:
 
             print(f'Загружено {len(max_size_photo)} фото')
             i += count
-
-        # Записываем данные о всех скачанных фоторафиях в файл .json
-        with open("photos.json", "w") as file:
-            json.dump(photos, file, indent=4)
+            # Записываем данные о всех скачанных фоторафиях в файл .json
+            json_save(photos, "photos.json")
 
 
 class YaUploader:
